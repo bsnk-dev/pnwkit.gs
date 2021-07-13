@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href="https://github.com/bsnk-dev/pnwkit.gs">
-    <img src="https://assets.bsnk.dev/pnwkit_icon.png" alt="Logo" width="120" height="120">
+    <img src="https://assets.bsnk.dev/pnwkit_icon_gs.png" alt="Logo" width="120" height="120">
   </a>
 
   <h3 align="center">PnWKit.gs</h3>
@@ -32,7 +32,7 @@ This version of the PnWKit Library is for Google Apps Scripts so you can use the
 
 ### Prerequisites
 
-Install the library using the code: ``12345678910``.
+Install the library using the code: ```1Of_sAY3Me77EKy14A5tQdcNY57SPC9KpI739YYio8t04XqkFSd0pPfjQ```.
 
 ## Usage
 

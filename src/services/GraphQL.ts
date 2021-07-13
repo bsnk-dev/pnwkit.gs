@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import {AnyQuery} from '../interfaces/PoliticsAndWarGraphQL';
 
 /**
@@ -18,15 +17,11 @@ class GraphQLService {
   public async makeCall(query: string, apiKey: string) {
     if (!apiKey) throw new Error('GraphQLService: Cannot make a call without an API key!');
 
-    const res = await fetch(`${this.politicsAndWarAPIRoot}/?api_key=${apiKey}&query=${query}`)
-        .then()
-        .catch((e: Error) => {
-          throw new Error(`GraphQLService: Failed to make api call, ${e}`);
-        });
+    const res = UrlFetchApp.fetch(`${this.politicsAndWarAPIRoot}/?api_key=${apiKey}&query=${encodeURIComponent(query.replace(/([ \n])+/g, ''))}`);
 
-    const resJSON = await res.json();
+    const resJSON = JSON.parse(res.getContentText());
 
-    if (!resJSON.data) throw new Error(`GraphQLService: Recieved no data from API call, ${JSON.stringify(res.body)}`);
+    if (!resJSON.data) throw new Error(`GraphQLService: Recieved no data from API call, ${JSON.stringify(resJSON)}`);
 
     return resJSON.data;
   }

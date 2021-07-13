@@ -1,11 +1,11 @@
-[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/bsnk-dev/pnwkit)
+[![Open in Visual Studio Code](https://open.vscode.dev/badges/open-in-vscode.svg)](https://open.vscode.dev/bsnk-dev/pnwkit.gs)
 
 <p align="center">
-  <a href="https://github.com/bsnk-dev/pnwkit">
+  <a href="https://github.com/bsnk-dev/pnwkit.gs">
     <img src="https://assets.bsnk.dev/pnwkit_icon.png" alt="Logo" width="120" height="120">
   </a>
 
-  <h3 align="center">PnWKit</h3>
+  <h3 align="center">PnWKit.gs</h3>
 
   <p align="center">
     Politics & War V3 API Library

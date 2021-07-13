@@ -1,0 +1,75 @@
+import {Kit} from '../..';
+import {Nation, NationPaginator, QueryNationsArgs} from '../../interfaces/PoliticsAndWarGraphQL';
+import GraphQL from '../../services/GraphQL';
+
+export enum AlliancePosition {
+  Noalliance = 0,
+  Applicant = 1,
+  Member = 2,
+  Officer = 3,
+  Heir = 4,
+  Leader = 5,
+}
+
+export interface Parameters {
+  first: number;
+  id?: number[];
+  alliance_id?: number[];
+  alliance_position?: AlliancePosition;
+  color?: string;
+  created_after?: string;
+  min_score?: number;
+  max_score?: number;
+  cities?: number;
+  min_cities?: number;
+  max_cities?: number;
+  vmode?: boolean;
+  page?: number;
+}
+
+/**
+ * Gets a list of nations
+ * @param {Parameters} params Query parameters to customize your results
+ * @param {string} query The graphql query to get info with
+ * @param {boolean?} paginator Deliver the data in a paginated format
+ * @returns {Promise<Nation[] | NationPaginator>} The nations queried or as paginated
+ */
+export default async function nationQuery(this: Kit, params: Parameters, query: string, paginator?: false): Promise<Nation[]>;
+export default async function nationQuery(this: Kit, params: Parameters, query: string, paginator: true): Promise<NationPaginator>;
+export default async function nationQuery(
+    this: Kit,
+    params: Parameters,
+    query: string,
+    paginator?: boolean,
+): Promise<NationPaginator | Nation[]> {
+  const argsToParameters = GraphQL.generateParameters(params as QueryNationsArgs);
+
+  const res = await GraphQL.makeCall(`
+    {
+      nations${argsToParameters} {
+        ${
+          (paginator) ?
+          `
+          paginatorInfo {
+            count,
+            currentPage,
+            firstItem,
+            hasMorePages,
+            lastItem,
+            lastPage,
+            perPage,
+            total
+          },
+          `:''
+}
+        data {
+          ${query}
+        }
+      }
+    }
+  `, this.apiKey);
+
+  if (paginator) return res.nations as NationPaginator;
+
+  return res.nations.data as Nation[];
+}

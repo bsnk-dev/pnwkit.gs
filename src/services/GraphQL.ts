@@ -26,9 +26,17 @@ class GraphQLService {
     return {
       data: resJSON.data,
       rateLimit: {
+        // eslint-disable-next-line
+        // @ts-ignore
         resetAfterSeconds: Number(res.getHeaders()['X-RateLimit-Reset-After']),
+        // eslint-disable-next-line
+        // @ts-ignore
         limit: Number(res.getHeaders()['X-RateLimit-Limit']),
+        // eslint-disable-next-line
+        // @ts-ignore
         remaining: Number(res.getHeaders()['X-RateLimit-Remaining']),
+        // eslint-disable-next-line
+        // @ts-ignore
         reset: Number(res.getHeaders()['X-RateLimit-Reset']),
       },
     };

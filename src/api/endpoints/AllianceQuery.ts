@@ -1,11 +1,16 @@
 import {Kit} from '../..';
-import {Alliance, AlliancePaginator, QueryAlliancesArgs} from '../../interfaces/PoliticsAndWarGraphQL';
+import {
+  Alliance,
+  AlliancePaginator,
+  QueryAlliancesArgs, QueryAlliancesOrderByOrderByClause,
+} from '../../interfaces/PoliticsAndWarGraphQL';
 import GraphQL from '../../services/GraphQL';
 
 export interface Parameters {
   first: number;
   id?: number[];
   page?: number;
+  orderBy?: QueryAlliancesOrderByOrderByClause;
 }
 
 /**
@@ -50,7 +55,9 @@ export default async function allianceQuery(
     }
   `, this.apiKey);
 
-  if (paginator) return res.alliances as AlliancePaginator;
+  this.setRateLimit(res.rateLimit);
 
-  return res.alliances.data as Alliance[];
+  if (paginator) return res.data.alliances as AlliancePaginator;
+
+  return res.data.alliances.data as Alliance[];
 }

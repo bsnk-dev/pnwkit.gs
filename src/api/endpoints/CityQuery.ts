@@ -1,37 +1,43 @@
 import {Kit} from '../..';
 import {
-  QueryTradepricesArgs,
-  Tradeprice,
-  TradepricePaginator,
+  City,
+  CityPaginator,
+  QueryCitiesArgs,
+  QueryCitiesOrderByOrderByClause,
 } from '../../interfaces/PoliticsAndWarGraphQL';
 import GraphQL from '../../services/GraphQL';
 
 export interface Parameters {
+  id?: number[];
+  nation_id?: number[];
+
   first?: number;
   page?: number;
+
+  orderBy?: QueryCitiesOrderByOrderByClause;
 }
 
 /**
- * Gets a list of trade prices
+ * Gets a list of cities
  * @param {Parameters} params Query parameters to customize your results
  * @param {string} query The graphql query to get info with
- * @param {boolean} paginator If true, returns paginator information
- * @return {Promise<Tradeprice[] | TradepricePaginator>}
+ * @param {boolean} paginator If true it will return paginator info
+ * @return {Promise<City[] | CityPaginator>}
  */
-export default async function tradePricesQuery(this: Kit, params: Parameters, query: string, paginator?: false): Promise<Tradeprice[]>;
-export default async function tradePricesQuery(this: Kit, params: Parameters, query: string, paginator: true): Promise<TradepricePaginator>;
-export default async function tradePricesQuery(
+export default async function cityQuery(this: Kit, params: Parameters, query: string, paginator?: false): Promise<City[]>;
+export default async function cityQuery(this: Kit, params: Parameters, query: string, paginator: true): Promise<CityPaginator>;
+export default async function cityQuery(
     this: Kit,
     params: Parameters,
     query: string,
     paginator?: boolean,
-): Promise<Tradeprice[] | TradepricePaginator> {
-  const argsToParameters = GraphQL.generateParameters(params as QueryTradepricesArgs);
+): Promise<City[] | CityPaginator> {
+  const argsToParameters = GraphQL.generateParameters(params as QueryCitiesArgs);
 
   const res = await GraphQL.makeCall(`
     {
-      tradeprices${argsToParameters} {
-        ${
+      cities${argsToParameters} {
+       ${
     (paginator) ?
       `
           paginatorInfo {
@@ -56,8 +62,8 @@ export default async function tradePricesQuery(
   this.setRateLimit(res.rateLimit);
 
   if (paginator) {
-    return res.data.tradeprices as TradepricePaginator;
+    return res.data.cities;
   }
 
-  return res.data.tradeprices.data as Tradeprice[];
+  return res.data.cities.data as City[];
 }

@@ -23,26 +23,61 @@ class GraphQLService {
 
     if (!resJSON.data) throw new Error(`GraphQLService: Recieved no data from API call, ${JSON.stringify(resJSON)}`);
 
-    return resJSON.data;
+    return {
+      data: resJSON.data,
+      rateLimit: {
+        resetAfterSeconds: Number(res.getHeaders()['X-RateLimit-Reset-After']),
+        limit: Number(res.getHeaders()['X-RateLimit-Limit']),
+        remaining: Number(res.getHeaders()['X-RateLimit-Remaining']),
+        reset: Number(res.getHeaders()['X-RateLimit-Reset']),
+      },
+    };
   }
 
   /**
    * Takes a query and outputs query Parameters
    * @param {AnyQuery} queryParameters Any one of the five queries that take Parameters
+   * @param {string} enumeratorParameters Parameters who are represented as strings, but not sent as a string;
+   * they are treated like numbers, with no quotes.
    * @return {string}
    */
-  public generateParameters(queryParameters: AnyQuery) {
+  public generateParameters(queryParameters: AnyQuery, enumeratorParameters: string[] = []): string {
     const parameters: string[] = [];
 
-    for (const [paramter, value] of Object.entries(queryParameters)) {
+    for (const [parameter, value] of Object.entries(queryParameters)) {
       if (value === undefined) continue;
 
-      if (typeof value == 'string') {
-        parameters.push(`${paramter}: ${value}`);
-      } else if (typeof value == 'object' && value?.length) {
-        parameters.push(`${paramter}: [${value.join(',')}]`);
+      if (typeof value == 'string' && !enumeratorParameters.includes(parameter)) {
+        parameters.push(`${parameter}: "${value}"`);
+      } else if (typeof value == 'object' && Array.isArray(value)) {
+        let interpretedValue = `${parameter}: [`;
+
+        for (const v of value) {
+          if (typeof v == 'string') {
+            interpretedValue += `"${v}",`;
+          } else {
+            interpretedValue += `${v},`;
+          }
+        }
+
+        interpretedValue.slice(0, -1);
+        interpretedValue += ']';
+
+        parameters.push(interpretedValue);
+      } else if (typeof value == 'object' && !Array.isArray(value)) {
+        // for orderBy handling
+
+        let interpretedValue = '';
+        interpretedValue += `{`;
+
+        for (const [k, v] of Object.entries(value)) {
+          interpretedValue += `${k}: ${v},`;
+        }
+
+        interpretedValue = interpretedValue.slice(0, -1);
+        interpretedValue += '}';
       } else {
-        parameters.push(`${paramter}: ${value}`);
+        parameters.push(`${parameter}: ${value}`);
       }
     }
 

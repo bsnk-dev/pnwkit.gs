@@ -1,5 +1,10 @@
 import {Kit} from '../..';
-import {Nation, NationPaginator, QueryNationsArgs} from '../../interfaces/PoliticsAndWarGraphQL';
+import {
+  Nation,
+  NationPaginator,
+  QueryNationsArgs,
+  QueryNationsOrderByOrderByClause,
+} from '../../interfaces/PoliticsAndWarGraphQL';
 import GraphQL from '../../services/GraphQL';
 
 export enum AlliancePosition {
@@ -14,6 +19,9 @@ export enum AlliancePosition {
 export interface Parameters {
   first: number;
   id?: number[];
+  name?: string;
+  nation_name?: string[];
+  leader_name?: string[];
   alliance_id?: number[];
   alliance_position?: AlliancePosition;
   color?: string;
@@ -25,6 +33,7 @@ export interface Parameters {
   max_cities?: number;
   vmode?: boolean;
   page?: number;
+  orderBy?: QueryNationsOrderByOrderByClause;
 }
 
 /**
@@ -69,7 +78,9 @@ export default async function nationQuery(
     }
   `, this.apiKey);
 
-  if (paginator) return res.nations as NationPaginator;
+  this.setRateLimit(res.rateLimit);
 
-  return res.nations.data as Nation[];
+  if (paginator) return res.data.nations as NationPaginator;
+
+  return res.data.nations.data as Nation[];
 }

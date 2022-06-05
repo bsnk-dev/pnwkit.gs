@@ -17,7 +17,7 @@ class GraphQLService {
   public async makeCall(query: string, apiKey: string) {
     if (!apiKey) throw new Error('GraphQLService: Cannot make a call without an API key!');
 
-    const res = UrlFetchApp.fetch(`${this.politicsAndWarAPIRoot}/?api_key=${apiKey}&query=${encodeURIComponent(query.replace(/([ \n])+/g, ''))}`);
+    const res = UrlFetchApp.fetch(`${this.politicsAndWarAPIRoot}?api_key=${apiKey}&query=${encodeURIComponent(query.replace(/([ \n])+/g, ''))}`);
 
     const resJSON = JSON.parse(res.getContentText());
 

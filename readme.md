@@ -23,6 +23,8 @@
   </p>
 </p>
 
+## PnWKit.gs has NOT been updated for the new version of the V3 API yet, the JS/TS version and Python version has.
+
 
 PnWKit is here to make interacting with the V3 Politics and War API easy. All you have to do is import the library, add your key, and make a query.
 

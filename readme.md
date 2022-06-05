@@ -23,9 +23,6 @@
   </p>
 </p>
 
-## PnWKit.gs has NOT been updated for the new version of the V3 API yet, the JS/TS version and Python version has.
-
-
 PnWKit is here to make interacting with the V3 Politics and War API easy. All you have to do is import the library, add your key, and make a query.
 
 ## Getting Started
@@ -99,6 +96,9 @@ const nations = await cachableNationQuery({id: [100541], first: 1}, `name`);
 const nationsCached = await cachableNationQuery({id: [100541], first: 1}, `name`);
 ```
 
+### Rate-limit Information
+
+Currently, PnWKit for GAS cannot collect rate-limit information, however JS/TS and Python can.
 
 You can also do the following queries in PnWKit:
 
@@ -109,6 +109,10 @@ You can also do the following queries in PnWKit:
 - warQuery
 - treasureQuery
 - colorQuery
+- bountyQuery
+- cityQuery
+- warAttackQuery
+- bankRecordsQuery
 
 You can look at the arguments and possible data to collect here at the [docs](https://bsnk-dev.github.io/pnwkit/).
 
